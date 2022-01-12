@@ -30,30 +30,42 @@ import { FadeTransform, Fade, Stagger } from 'react-animation-components';
     else return <div></div>;
   }
 
-function RenderComments({comments, postComment, dishId}) {
+function RenderComments({dish ,comments, postComment, dishId}) {
     if (comments == null) {
       return <div></div>;
     }
+
+    const commentDetails = comments.map(comment => {
+      return (
+          
+          <Fade in>
+            <li key={comment.id}>
+              <p>{comment.comment}</p>
+              <p>-- {comment.author},
+              &nbsp;
+              {new Intl.DateTimeFormat('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: '2-digit'
+              }).format(new Date(comment.date))}
+              </p>
+            </li>
+          </Fade>
+
+      )
+   })
 
     return (
       <div className="col-12 col-md-5 m-1">
         <h4>Comment</h4>
         <ul className="list-unstyled">
           <Stagger in>
-            {comments.map((comment) => {
-                return (
-                    <Fade in>
-                    <li key={comment.id}>
-                    <p>{comment.comment}</p>
-                    <p>-- {comment.author} , {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</p>
-                    </li>
-                    </Fade>
-                );
-            })}
+              {commentDetails}
           </Stagger>
         </ul>
 
-        <CommentForm dishId={dishId} postComment={postComment} />
+
+        <CommentForm dish={dish} dishId={dishId} postComment={postComment} />
       </div>
     );
   }
@@ -98,7 +110,8 @@ function RenderComments({comments, postComment, dishId}) {
             </div>
             <div className="row">
                 <RenderDish dish={props.dish} />
-                <RenderComments comments={props.comments}
+                <RenderComments dish={props.dish}
+                  comments={props.comments}
                   postComment={props.postComment}
                   dishId={props.dish.id}
                 />

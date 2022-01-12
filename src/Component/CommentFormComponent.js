@@ -135,7 +135,6 @@ class CommentForm extends Component{
             </React.Fragment>
         )
     }
-
 }
 
 export default CommentForm;
